@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>IELTS Pro – معلم خصوصی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#101B2E;--ink2:#1C2C45;--parch:#F1E9D8;--parch2:#FAF5EA;
+  --stamp:#C73E3E;--stampdark:#9A2E2E;--gold:#C9A14A;--good:#2F7D5C;
+  --muted:#6B7280;--line:rgba(16,27,46,0.14);--bg:#0D1625;
+  --card-bg:var(--parch);--card-txt:var(--ink);
+}
+[data-dark]{
+  --bg:#0D1625;--card-bg:#1C2C45;--card-txt:#FAF5EA;
+  --line:rgba(255,255,255,0.1);--muted:#9CA3AF;
+  --parch:#1C2C45;--parch2:#253347;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--card-txt);min-height:100vh;}
+.app{max-width:540px;margin:0 auto;padding:10px 10px 90px;}
+
+.hdr{display:flex;justify-content:space-between;align-items:center;
+  background:var(--ink2);border-radius:14px;padding:10px 14px;
+  margin-bottom:10px;border:1px solid var(--line);flex-wrap:wrap;gap:6px;}
+.hdr h1{font-size:15px;font-weight:800;color:#FAF5EA;}
+.hdr-badge{background:var(--gold);color:var(--ink);font-size:8px;padding:2px 7px;border-radius:999px;font-weight:700;}
+.hdr-btn{background:transparent;border:1px solid rgba(255,255,255,0.2);color:#FAF5EA;
+  padding:5px 10px;border-radius:999px;font-size:11px;cursor:pointer;font-family:inherit;}
+
+.apibox{background:rgba(201,161,74,0.12);border:1px solid rgba(201,161,74,0.4);
+  border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--ink);}
+[data-dark] .apibox{color:#FAF5EA;}
+.apibox input{margin-top:6px;padding:7px 10px;border-radius:8px;border:1px solid var(--line);
+  font-family:inherit;font-size:12px;background:#fff;color:var(--ink);width:100%;}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px;}
+.stat{background:var(--ink2);border-radius:12px;padding:8px 4px;text-align:center;border:1px solid var(--line);}
+.stat .n{font-size:17px;font-weight:800;color:var(--gold);display:block;}
+.stat .l{font-size:8px;color:var(--muted);display:block;margin-top:1px;}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;margin-bottom:10px;padding-bottom:2px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:none;padding:6px 10px;border-radius:999px;cursor:pointer;background:var(--ink2);
+  color:var(--muted);font-size:9px;font-weight:700;border:1px solid var(--line);white-space:nowrap;}
+.tab.on{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.panel{display:none;animation:fu .2s ease;}
+.panel.on{display:block;}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.card{background:var(--card-bg);color:var(--card-txt);border-radius:14px;
+  padding:12px 14px;margin-bottom:10px;border:1px solid var(--line);box-shadow:0 4px 18px rgba(0,0,0,.12);}
+.card h2{font-size:14px;font-weight:800;margin-bottom:2px;}
+.sub{color:var(--muted);font-size:10.5px;margin-bottom:8px;line-height:1.6;}
+
+label{display:block;font-size:10.5px;font-weight:700;margin:6px 0 3px;}
+input,select,textarea{
+  width:100%;padding:7px 9px;border-radius:8px;border:1px solid var(--line);
+  font-family:inherit;font-size:12px;background:#fff;color:var(--ink);}
+textarea{resize:vertical;min-height:65px;line-height:1.75;}
+.row{display:flex;gap:6px;flex-wrap:wrap;}.row>*{flex:1;min-width:110px;}
+
+.btn{display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:7px 12px;
+  border-radius:8px;font-weight:700;font-size:11px;font-family:inherit;border:none;
+  min-height:36px;transition:opacity .15s;}
+.btn:active{opacity:.75;}.btn:disabled{opacity:.45;cursor:wait;}
+.btn.pri{background:var(--stamp);color:#fff;}
+.btn.gold{background:var(--gold);color:var(--ink);}
+.btn.sec{background:transparent;border:1.5px solid var(--line);color:var(--card-txt);}
+.btn-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
+
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:5px 0;}
+.chip{padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:#fff;
+  font-size:10px;cursor:pointer;font-weight:700;color:var(--ink);}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+[data-dark] .chip{background:var(--ink2);color:var(--parch2);}
+
+.qbox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:7px;cursor:pointer;}
+[data-dark] .qbox{background:var(--ink2);}
+.qbox .qen{font-weight:700;font-size:13px;line-height:1.7;margin-bottom:3px;}
+.qbox .qfa{font-size:11px;color:var(--muted);}
+.spkbtn{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);
+  background:#fff;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;}
+[data-dark] .spkbtn{background:var(--ink2);}
+
+.wcard{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:5px;}
+[data-dark] .wcard{background:var(--ink2);}
+.wcard .word{font-size:14px;font-weight:800;}
+.wcard .pron{font-family:monospace;color:var(--stampdark);font-size:11px;cursor:pointer;margin:2px 0;}
+.wcard .fam{font-size:11px;color:var(--good);font-weight:700;}
+.wcard .col{font-size:10px;color:var(--gold);margin-top:2px;}
+.wcard .eg{font-size:10.5px;color:var(--muted);line-height:1.6;margin-top:3px;}
+.pos-tag{font-size:8px;background:rgba(16,27,46,.1);padding:1px 5px;border-radius:999px;margin-right:3px;}
+
+.phcard{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:5px;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:7px;}
+[data-dark] .phcard{background:var(--ink2);}
+.phcard .en{font-weight:700;font-size:12px;}
+.phcard .fa{font-size:10.5px;color:var(--muted);margin-top:2px;}
+.phcard .tag{font-size:8.5px;background:rgba(47,125,92,.1);color:var(--good);
+  padding:2px 6px;border-radius:4px;display:inline-block;margin-top:3px;}
+
+.result-area{margin-top:10px;border-top:2px dashed var(--line);padding-top:10px;}
+.band-big{font-size:22px;font-weight:800;color:var(--stamp);}
+.criteria{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:7px 0;}
+.cr-item{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px;text-align:center;font-size:10.5px;}
+[data-dark] .cr-item{background:var(--ink2);}
+.cr-item .s{font-size:16px;font-weight:800;color:var(--stamp);}
+.eitem{background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 9px;margin-bottom:5px;font-size:11px;}
+[data-dark] .eitem{background:var(--ink2);}
+.eitem .o{color:var(--stamp);text-decoration:line-through;}
+.eitem .f{color:var(--good);font-weight:700;}
+.eitem .why{color:var(--muted);font-size:10.5px;margin-top:3px;}
+.mans{background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px;
+  line-height:1.85;font-size:12.5px;margin-top:5px;}
+[data-dark] .mans{background:var(--ink2);}
+.trans-box{background:rgba(47,125,92,.08);border:1px solid rgba(47,125,92,.2);
+  border-radius:9px;padding:9px 11px;margin-top:7px;font-size:12px;line-height:1.8;}
+.trans-box .tl{font-size:10px;color:var(--good);font-weight:700;margin-bottom:3px;}
+.vpair{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px;flex-wrap:wrap;}
+.vpair .s{color:var(--muted);}
+.vpair .a{font-weight:700;color:var(--good);cursor:pointer;}
+
+.loading{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11px;padding:10px 0;}
+.spin{width:13px;height:13px;border:2px solid var(--line);border-top-color:var(--gold);
+  border-radius:50%;animation:sp .75s linear infinite;flex:none;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.errbox{background:rgba(199,62,62,.1);border:1px solid var(--stamp);border-radius:8px;
+  padding:8px 10px;margin:6px 0;color:var(--stampdark);font-size:11px;line-height:1.6;}
+.day-badge{display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--gold);
+  padding:4px 12px;border-radius:999px;font-weight:800;font-size:11px;margin-bottom:8px;}
+.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.sm{font-size:10.5px;color:var(--muted);}
+.pw{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px;}
+[data-dark] .pw{background:var(--ink2);}
+.pw ul{padding-inline-start:16px;font-size:11px;line-height:2;margin-top:4px;}
+.prog-bar{width:100%;height:6px;background:var(--line);border-radius:10px;overflow:hidden;margin:6px 0;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--good));border-radius:10px;transition:width .8s;}
+@media(max-width:400px){.vocab-grid{grid-template-columns:1fr;}.criteria{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:7px;">
+    <h1>🎯 IELTS Pro</h1><span class="hdr-badge">v8.0</span>
+  </div>
+  <div style="display:flex;gap:5px;">
+    <button class="hdr-btn" onclick="toggleDark()" id="thBtn">🌙</button>
+    <button class="hdr-btn" onclick="if(confirm('همه آمار پاک شود؟'))localStorage.clear(),location.reload()">🔄</button>
+  </div>
+</div>
+
+<!-- API KEY -->
+<div class="apibox" id="apikeyBox">
+  🔑 <strong>API Key آنتروپیک:</strong> برای فعال‌شدن هوش مصنوعی لازمه.
+  <a href="https://console.anthropic.com/" target="_blank" style="color:var(--good);font-size:11px;display:block;margin:3px 0;">
+    دریافت رایگان از console.anthropic.com
+  </a>
+  <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+  <button class="btn gold" style="margin-top:6px;font-size:11px;" onclick="saveApiKey()">💾 ذخیره Key</button>
+  <span id="apiKeyStatus" style="font-size:10px;margin-right:6px;"></span>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><span class="n" id="stStreak">0</span><span class="l">روز پیاپی</span></div>
+  <div class="stat"><span class="n" id="stVocab">0</span><span class="l">لغت</span></div>
+  <div class="stat"><span class="n" id="stPhrases">0</span><span class="l">عبارت</span></div>
+  <div class="stat"><span class="n" id="stScore">0</span><span class="l">امتیاز</span></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab on" data-t="vocab">📖 لغات</div>
+  <div class="tab" data-t="phrases">💬 عبارات</div>
+  <div class="tab" data-t="speaking">🎤 Speaking</div>
+  <div class="tab" data-t="writing">✍️ Writing</div>
+  <div class="tab" data-t="grammar">📝 گرامر</div>
+  <div class="tab" data-t="plan">📅 برنامه</div>
+  <div class="tab" data-t="translate">🌐 ترجمه</div>
+</div>
+
+<!-- VOCAB -->
+<div class="panel on" id="pnl-vocab">
+  <div class="card">
+    <h2>📖 لغات روزانه Band 7+ (۳۰ لغت)</h2>
+    <div class="sub">تلفظ IPA · معنی فارسی · کالوکیشن · مثال آکادمیک</div>
+    <div class="row">
+      <div><label>روز (۱ تا ۲۷۰)</label><input type="number" id="vocabDay" min="1" max="270" value="1"></div>
+      <div><label>دسته</label>
+        <select id="vocabCat">
+          <option>General Academic</option><option>Education</option>
+          <option>Technology</option><option>Environment</option>
+          <option>Health</option><option>Crime & Law</option>
+          <option>Work & Economy</option><option>Social Issues</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn pri" onclick="loadVocab()">📖 بارگذاری ۳۰ لغت</button>
+      <button class="btn sec" onclick="speakAllVocab()">🔊 پخش</button>
+      <button class="btn sec" onclick="saveAllVocab()">⭐ ذخیره همه</button>
+    </div>
+    <div id="vocabOut"></div>
+  </div>
+  <div class="card">
+    <h2>⭐ لغات ذخیره‌شده</h2>
+    <div id="favVocabOut"></div>
+  </div>
+</div>
+
+<!-- PHRASES -->
+<div class="panel" id="pnl-phrases">
+  <div class="card">
+    <h2>💬 عبارات روزانه (۳۰ عبارت)</h2>
+    <div class="sub">عبارات آکادمیک و مکالمه‌ای با ترجمه فارسی</div>
+    <div class="row">
+      <div><label>روز</label><input type="number" id="phraseDay" min="1" max="90" value="1"></div>
+      <div><label>دسته</label>
+        <select id="phraseCat">
+          <option value="all">همه</option><option value="opinion">نظر</option>
+          <option value="linkers">لینک‌کننده</option><option value="conclusion">نتیجه‌گیری</option>
+          <option value="academic">آکادمیک</option><option value="daily">مکالمه روزانه</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn pri" onclick="loadPhrases()">📖 بارگذاری</button>
+      <button class="btn sec" onclick="speakAllPhrases()">🔊 پخش</button>
+      <button class="btn sec" onclick="saveAllPhrases()">⭐ ذخیره</button>
+    </div>
+    <div id="phrasesOut"></div>
+  </div>
+  <div class="card">
+    <h2>⭐ عبارات ذخیره‌شده</h2>
+    <div id="favPhrasesOut"></div>
+  </div>
+</div>
+
+<!-- SPEAKING -->
+<div class="panel" id="pnl-speaking">
+  <div class="card">
+    <h2>🎤 تمرین Speaking</h2>
+    <div class="sub">آیفون: روی میکروفون صفحه‌کلید بزن و دیکته کن</div>
+    <div class="chips" id="spkModeCh">
+      <div class="chip on" data-m="bank">سؤالات آماده</div>
+      <div class="chip" data-m="free">🗣 موضوع آزاد</div>
+    </div>
+    <div id="spkBank">
+      <div class="chips" id="partCh">
+        <div class="chip on" data-p="1">Part 1</div>
+        <div class="chip" data-p="2">Part 2</div>
+        <div class="chip" data-p="3">Part 3</div>
+      </div>
+      <div id="spkQs"></div>
+    </div>
+    <div id="spkFree" style="display:none">
+      <div style="background:rgba(201,161,74,.12);border:1px solid rgba(201,161,74,.3);border-radius:8px;padding:8px 10px;font-size:11px;margin-bottom:8px;line-height:1.7;">
+        💡 هر روز درباره هر موضوعی صحبت کن — کار، سفر، خبر، احساسات. AI اصلاح می‌کند.
+      </div>
+      <label>موضوع امروز (فارسی یا انگلیسی)</label>
+      <input type="text" id="freeTopic" placeholder="مثال: امروز یک جلسه سخت داشتم...">
+      <div class="btn-row">
+        <button class="btn sec" onclick="speak(document.getElementById('freeTopic').value)">🔊 پخش</button>
+        <button class="btn sec" onclick="transFreeTopic()">🌐 ترجمه</button>
+      </div>
+      <div id="freeTopicOut"></div>
+    </div>
+    <label style="margin-top:10px;">پاسخ تو</label>
+    <textarea id="spkIn" placeholder="جوابت را اینجا بنویس یا دیکته کن..."></textarea>
+    <div class="btn-row">
+      <button class="btn pri" id="spkBtn" onclick="evalSpeak()">🔍 ارزیابی</button>
+      <button class="btn sec" onclick="quickTrans('spkIn','spkTransOut')">🌐 ترجمه</button>
+      <button class="btn sec" onclick="document.getElementById('spkIn').value=''">پاک</button>
+    </div>
+    <div id="spkTransOut"></div>
+    <div id="spkOut"></div>
+  </div>
+</div>
+
+<!-- WRITING -->
+<div class="panel" id="pnl-writing">
+  <div class="card">
+    <h2>✍️ تمرین Writing</h2>
+    <div class="sub">موضوع دوزبانه · ۴ معیار رسمی · نمونه Band 7 و 8</div>
+    <div class="chips" id="taskCh">
+      <div class="chip on" data-t="task1">Task 1 – نمودار</div>
+      <div class="chip" data-t="task2">Task 2 – مقاله</div>
+      <div class="chip" data-t="custom">✏️ دلخواه</div>
+    </div>
+    <div id="writTopicsWrap"><div class="chips" id="writTopics"></div></div>
+    <div id="customBox" style="display:none;">
+      <label>موضوع (انگلیسی)</label>
+      <input type="text" id="customEn" placeholder="Should homework be banned?">
+      <label>ترجمه فارسی (اختیاری)</label>
+      <input type="text" id="customFa" placeholder="ترجمه...">
+    </div>
+    <div id="selTopicBox" style="display:none;margin-bottom:7px;"></div>
+    <label>متن تو</label>
+    <textarea id="writIn" placeholder="متن را بنویس یا دیکته کن..."></textarea>
+    <div class="btn-row">
+      <button class="btn pri" id="writBtn" onclick="evalWrit()">🔍 ارزیابی</button>
+      <button class="btn sec" onclick="quickTrans('writIn','writTransOut')">🌐 ترجمه</button>
+      <button class="btn sec" onclick="document.getElementById('writIn').value=''">پاک</button>
+    </div>
+    <div id="writTransOut"></div>
+    <div id="writOut"></div>
+  </div>
+</div>
+
+<!-- GRAMMAR -->
+<div class="panel" id="pnl-grammar">
+  <div class="card">
+    <h2>📝 آموزش گرامر</h2>
+    <div class="chips" id="gramCh">
+      <div class="chip on" data-g="present">حال ساده</div>
+      <div class="chip" data-g="past">گذشته</div>
+      <div class="chip" data-g="future">آینده</div>
+      <div class="chip" data-g="cont">استمراری</div>
+      <div class="chip" data-g="perfect">حال کامل</div>
+      <div class="chip" data-g="cond">شرطی</div>
+      <div class="chip" data-g="passive">مجهول</div>
+    </div>
+    <div id="gramOut"></div>
+  </div>
+</div>
+
+<!-- PLAN -->
+<div class="panel" id="pnl-plan">
+  <div class="card">
+    <h2>📅 برنامه مطالعاتی</h2>
+    <div class="row">
+      <div><label>تاریخ آزمون</label><input type="date" id="examDate"></div>
+      <div><label>نمره فعلی</label>
+        <select id="curBand"><option value="5">۵.۰</option><option value="5.5">۵.۵</option>
+          <option value="6" selected>۶.۰</option><option value="6.5">۶.۵</option><option value="7">۷.۰</option></select>
+      </div>
+      <div><label>نمره هدف</label>
+        <select id="tgtBand"><option value="6.5">۶.۵</option><option value="7" selected>۷.۰</option>
+          <option value="7.5">۷.۵</option><option value="8">۸.۰</option></select>
+      </div>
+    </div>
+    <button class="btn pri" style="margin-top:8px;" onclick="buildPlan()">📊 ساخت برنامه</button>
+    <div id="planOut" style="display:none;margin-top:8px;">
+      <div class="sm" id="planSum"></div>
+      <div id="planWks"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>📈 پیشرفت ماهانه</h2>
+    <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <div class="sm" style="text-align:center;" id="progTxt">۰٪ تکمیل</div>
+  </div>
+</div>
+
+<!-- TRANSLATE -->
+<div class="panel" id="pnl-translate">
+  <div class="card">
+    <h2>🌐 ترجمه سریع</h2>
+    <div class="chips" id="trDirCh">
+      <div class="chip on" data-d="auto">تشخیص خودکار</div>
+      <div class="chip" data-d="en-fa">🇬🇧→🇮🇷</div>
+      <div class="chip" data-d="fa-en">🇮🇷→🇬🇧</div>
+    </div>
+    <label>متن</label>
+    <textarea id="trIn" placeholder="متن را بنویس..."></textarea>
+    <div class="btn-row">
+      <button class="btn pri" id="trBtn" onclick="doTrans()">🌐 ترجمه</button>
+      <button class="btn sec" onclick="speak(document.getElementById('trIn').value)">🔊 پخش</button>
+      <button class="btn sec" onclick="document.getElementById('trIn').value='';document.getElementById('trOut').innerHTML=''">پاک</button>
+    </div>
+    <div id="trOut"></div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+const $=id=>document.getElementById(id);
+
+// ── DARK MODE ──
+function toggleDark(){
+  const on=document.documentElement.hasAttribute('data-dark');
+  on?document.documentElement.removeAttribute('data-dark'):document.documentElement.setAttribute('data-dark','');
+  $('thBtn').textContent=on?'🌙':'☀️';
+  localStorage.setItem('dark',on?'0':'1');
+}
+if(localStorage.getItem('dark')==='1'){document.documentElement.setAttribute('data-dark','');$('thBtn').textContent='☀️';}
+
+// ── TABS ──
+document.querySelectorAll('.tab').forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    $('pnl-'+t.dataset.t).classList.add('on');
+    localStorage.setItem('lastTab',t.dataset.t);
+  };
+});
+const lt=localStorage.getItem('lastTab');
+if(lt){const t=document.querySelector(`.tab[data-t="${lt}"]`);if(t)t.click();}
+
+// ── TTS ──
+function speak(txt){
+  if(!txt||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang='en-US';u.rate=0.88;
+  window.speechSynthesis.speak(u);
+}
+
+// ── API KEY ──
+let apiKey=localStorage.getItem('apiKey')||'';
+function initApiKey(){
+  if(apiKey){$('apiKeyInput').value=apiKey;$('apikeyBox').style.display='none';}
+}
+function saveApiKey(){
+  const k=$('apiKeyInput').value.trim();
+  if(!k.startsWith('sk-ant-')){$('apiKeyStatus').textContent='❌ فرمت نادرست';$('apiKeyStatus').style.color='red';return;}
+  apiKey=k;localStorage.setItem('apiKey',k);
+  $('apikeyBox').style.display='none';
+  $('apiKeyStatus').textContent='✅ ذخیره شد';
+}
+initApiKey();
+
+// ── CLAUDE API ──
+async function ai(sys,usr,tok=1000){
+  if(!apiKey)throw new Error('API Key وارد نشده. لطفاً ابتدا کلید را ذخیره کن.');
+  const r=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-api-key":apiKey,
+      "anthropic-version":"2023-06-01",
+      "anthropic-dangerous-direct-browser-access":"true"
+    },
+    body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:tok,system:sys,messages:[{role:"user",content:usr}]})
+  });
+  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||`HTTP ${r.status}`);}
+  const d=await r.json();
+  let txt=(d.content||[]).map(b=>b.text||"").join("\n");
+  txt=txt.replace(/^```json\s*/,"").replace(/\s*```$/,"").trim();
+  // close truncated JSON
+  let opens=0;
+  for(const c of txt){if(c==='{')opens++;else if(c==='}')opens--;}
+  while(opens-->0)txt+='}';
+  return JSON.parse(txt);
+}
+
+// ── VOCAB ──
+let loadedWords=[];
+let favVocab=JSON.parse(localStorage.getItem('fv')||'[]');
+
+async function fetchVocabBatch(day,cat,batch){
+  const s=batch===1?1:16, e=batch===1?15:30;
+  const sys=`Generate exactly 15 unique IELTS Academic Band 7+ vocabulary items (numbers ${s} to ${e}) for study day ${day}, category "${cat}". Use day+batch as variety seed. Return ONLY raw JSON (no markdown):
+{"words":[{"w":"word","ipa":"AmE IPA","pos":"noun/verb/adj/adv","fa":"معنی فارسی","col":"collocation","ex":"academic example sentence"}]}
+Ensure IPA is accurate. Words must be genuinely Band 7+ academic.`;
+  const r=await ai(sys,`Day:${day} Batch:${batch} Cat:${cat}`,900);
+  return r.words||[];
+}
+
+async function loadVocab(){
+  const day=parseInt($('vocabDay').value)||1, cat=$('vocabCat').value;
+  $('vocabOut').innerHTML=`<div class="loading"><div class="spin"></div> بارگذاری لغات ۱ تا ۱۵...</div>`;
+  try{
+    const b1=await fetchVocabBatch(day,cat,1);
+    loadedWords=b1; renderWords(b1,day,cat,false);
+    const n=document.createElement('div');
+    n.className='loading';n.innerHTML='<div class="spin"></div> بارگذاری لغات ۱۶ تا ۳۰...';
+    $('vocabOut').appendChild(n);
+    const b2=await fetchVocabBatch(day,cat,2);
+    loadedWords=[...b1,...b2]; renderWords(loadedWords,day,cat,true);
+    updateStats();
+  }catch(e){$('vocabOut').innerHTML=`<div class="errbox">⚠️ ${e.message}</div>`;}
+}
+
+function renderWords(ws,day,cat,done){
+  let h=`<div class="day-badge">📖 روز ${day} — ${cat} — ${ws.length} لغت${done?' ✅':' ⏳'}</div><div class="vocab-grid">`;
+  ws.forEach((w,i)=>{
+    const sw=(w.w||'').replace(/'/g,"\\'");
+    h+=`<div class="wcard">
+      <div style="display:flex;justify-content:space-between;gap:4px;">
+        <div style="flex:1;">
+          <span class="word">${i+1}. ${w.w}</span><span class="pos-tag">${w.pos||''}</span>
+          <div class="pron" onclick="speak('${sw}')">${w.ipa||''} 🔊</div>
+          <div class="fam">🇮🇷 ${w.fa||''}</div>
+          <div class="col">📎 ${w.col||''}</div>
+          <div class="eg">💬 ${w.ex||''}</div>
+        </div>
+        <button class="spkbtn" style="width:24px;height:24px;font-size:9px;" onclick="toggleFavVocab('${sw}')">⭐</button>
+      </div>
+    </div>`;
+  });
+  h+='</div>';
+  $('vocabOut').innerHTML=h;
+  renderFavVocab();
+}
+
+function toggleFavVocab(w){
+  const i=favVocab.indexOf(w);
+  if(i>-1)favVocab.splice(i,1);else favVocab.push(w);
+  localStorage.setItem('fv',JSON.stringify(favVocab));
+  renderFavVocab();updateStats();
+}
+function renderFavVocab(){
+  const el=$('favVocabOut');
+  if(!favVocab.length){el.innerHTML='<div class="sm">هنوز لغتی ذخیره نشده.</div>';return;}
+  el.innerHTML=favVocab.map(w=>`<div class="wcard" style="display:flex;justify-content:space-between;align-items:center;padding:6px 9px;">
+    <span style="font-size:12px;font-weight:700;">${w}</span>
+    <div style="display:flex;gap:4px;">
+      <button class="spkbtn" style="width:26px;height:26px;font-size:10px;" onclick="speak('${w.replace(/'/g,"\\'")}')">🔊</button>
+      <button class="spkbtn" style="width:26px;height:26px;font-size:10px;" onclick="toggleFavVocab('${w.replace(/'/g,"\\'")}')">🗑</button>
+    </div>
+  </div>`).join('');
+}
+function saveAllVocab(){
+  loadedWords.forEach(w=>{if(!favVocab.includes(w.w))favVocab.push(w.w);});
+  localStorage.setItem('fv',JSON.stringify(favVocab));
+  renderFavVocab();updateStats();alert('✅ همه لغات ذخیره شد!');
+}
+function speakAllVocab(){
+  if(!loadedWords.length){alert('اول لغات را بارگذاری کن.');return;}
+  speak(loadedWords.map(w=>`${w.w}. ${w.ex}`).join('. '));
+}
+
+// ── PHRASES ──
+const phDB={
+  opinion:["From my perspective, ...","I am inclined to believe that ...","It is my firm conviction that ...","Personally speaking, ...","In my view, ...","I would argue that ...","As far as I am concerned, ...","I strongly believe that ...","It seems to me that ...","One could reasonably argue that ..."],
+  linkers:["Furthermore, ...","Moreover, ...","Nevertheless, ...","Consequently, ...","As a result, ...","On the other hand, ...","In addition, ...","However, ...","Notwithstanding this, ...","In a similar vein, ..."],
+  conclusion:["In conclusion, ...","To sum up, ...","Taking everything into account, ...","All things considered, ...","On the whole, ...","In summary, ...","Overall, ...","To conclude, ..."],
+  academic:["The evidence suggests that ...","Research has shown that ...","Studies indicate that ...","It is worth noting that ...","The findings demonstrate that ...","It is widely acknowledged that ...","A case in point is ...","This can be attributed to ...","The data clearly indicate that ...","Analysis reveals that ..."],
+  daily:["How are you doing?","That's a great idea!","I totally agree with you.","I really appreciate it.","Have a nice day!","Take care of yourself.","It was nice meeting you.","I look forward to it.","That's a good point.","Can you help me with this?","Long time no see!","I see what you mean.","What do you think about this?","I'm not sure about that.","Could you please explain?"]
+};
+const phFa={
+  "From my perspective, ...":"از دیدگاه من، ...",
+  "I am inclined to believe that ...":"تمایل دارم باور کنم که ...",
+  "It is my firm conviction that ...":"اعتقاد راسخ من این است که ...",
+  "Personally speaking, ...":"از نظر شخصی، ...","In my view, ...":"به نظر من، ...",
+  "I would argue that ...":"من استدلال می‌کنم که ...","As far as I am concerned, ...":"تا آنجا که به من مربوط است، ...",
+  "I strongly believe that ...":"به شدت باور دارم که ...","It seems to me that ...":"به نظرم می‌رسد که ...",
+  "One could reasonably argue that ...":"می‌توان به‌طور موجه استدلال کرد که ...",
+  "Furthermore, ...":"علاوه بر این، ...","Moreover, ...":"به علاوه، ...","Nevertheless, ...":"با این حال، ...",
+  "Consequently, ...":"در نتیجه، ...","As a result, ...":"در نتیجه، ...","On the other hand, ...":"از طرف دیگر، ...",
+  "In addition, ...":"به علاوه، ...","However, ...":"با این حال، ...","Notwithstanding this, ...":"با وجود این، ...",
+  "In a similar vein, ...":"به همین ترتیب، ...","In conclusion, ...":"در نتیجه‌گیری، ...","To sum up, ...":"به طور خلاصه، ...",
+  "Taking everything into account, ...":"با در نظر گرفتن همه جوانب، ...","All things considered, ...":"با در نظر گرفتن همه چیز، ...",
+  "On the whole, ...":"به طور کلی، ...","In summary, ...":"به طور خلاصه، ...","Overall, ...":"به طور کلی، ...",
+  "To conclude, ...":"برای نتیجه‌گیری، ...","The evidence suggests that ...":"شواهد نشان می‌دهد که ...",
+  "Research has shown that ...":"تحقیقات نشان داده است که ...","Studies indicate that ...":"مطالعات نشان می‌دهد که ...",
+  "It is worth noting that ...":"قابل توجه است که ...","The findings demonstrate that ...":"یافته‌ها نشان می‌دهد که ...",
+  "It is widely acknowledged that ...":"به طور گسترده پذیرفته شده که ...","A case in point is ...":"یک مثال بارز این است که ...",
+  "This can be attributed to ...":"این را می‌توان به ... نسبت داد","The data clearly indicate that ...":"داده‌ها به وضوح نشان می‌دهد که ...",
+  "Analysis reveals that ...":"تحلیل نشان می‌دهد که ...","How are you doing?":"حال شما چطور است؟",
+  "That's a great idea!":"این ایده عالی است!","I totally agree with you.":"کاملاً با شما موافقم.",
+  "I really appreciate it.":"واقعاً قدردانم.","Have a nice day!":"روز خوبی داشته باشید!",
+  "Take care of yourself.":"مراقب خودت باش.","It was nice meeting you.":"از دیدارتان خوشحال شدم.",
+  "I look forward to it.":"مشتاقانه منتظر آن هستم.","That's a good point.":"نکته خوبی است.",
+  "Can you help me with this?":"می‌توانید کمک کنید؟","Long time no see!":"مدت زیادی بود ندیدمت!",
+  "I see what you mean.":"منظورت را می‌فهمم.","What do you think about this?":"نظرت درباره این چیست؟",
+  "I'm not sure about that.":"مطمئن نیستم.","Could you please explain?":"می‌توانید توضیح دهید؟"
+};
+let loadedPhrases=[];
+let favPhrases=JSON.parse(localStorage.getItem('fp')||'[]');
+const phCatLabel={opinion:"نظر",linkers:"لینک‌کننده",conclusion:"نتیجه‌گیری",academic:"آکادمیک",daily:"روزانه"};
+
+function loadPhrases(){
+  const cat=$('phraseCat').value;
+  const cats=cat==='all'?Object.keys(phDB):[cat];
+  let pool=[];
+  cats.forEach(c=>{(phDB[c]||[]).forEach(p=>pool.push({en:p,fa:phFa[p]||p,cat:c}));});
+  loadedPhrases=pool.slice(0,30);
+  renderPhrases();updateStats();
+}
+function renderPhrases(){
+  const day=parseInt($('phraseDay').value)||1;
+  let h=`<div class="day-badge">💬 روز ${day} — ${loadedPhrases.length} عبارت</div>`;
+  loadedPhrases.forEach((p,i)=>{
+    const se=(p.en||'').replace(/'/g,"\\'");
+    h+=`<div class="phcard"><div style="flex:1;">
+      <div class="en">${i+1}. ${p.en}</div>
+      <div class="fa">🇮🇷 ${p.fa||''}</div>
+      ${p.cat&&p.cat!=='generated'?`<div class="tag">📌 ${phCatLabel[p.cat]||p.cat}</div>`:''}
+    </div>
+    <button class="spkbtn" style="width:26px;height:26px;font-size:10px;" onclick="speak('${se}')">🔊</button>
+    <button class="spkbtn" style="width:26px;height:26px;font-size:10px;background:transparent;" onclick="toggleFavPhrase('${se}')">⭐</button>
+    </div>`;
+  });
+  $('phrasesOut').innerHTML=h;
+  renderFavPhrases();
+}
+function toggleFavPhrase(p){
+  const i=favPhrases.indexOf(p);
+  if(i>-1)favPhrases.splice(i,1);else favPhrases.push(p);
+  localStorage.setItem('fp',JSON.stringify(favPhrases));
+  renderFavPhrases();updateStats();
+}
+function renderFavPhrases(){
+  const el=$('favPhrasesOut');
+  if(!favPhrases.length){el.innerHTML='<div class="sm">هنوز عبارتی ذخیره نشده.</div>';return;}
+  el.innerHTML=favPhrases.map(p=>`<div class="phcard" style="padding:7px 9px;">
+    <span style="font-size:11.5px;font-weight:700;flex:1;">${p}</span>
+    <button class="spkbtn" style="width:26px;height:26px;font-size:10px;" onclick="speak('${p.replace(/'/g,"\\'")}')">🔊</button>
+  </div>`).join('');
+}
+function saveAllPhrases(){
+  loadedPhrases.forEach(p=>{if(!favPhrases.includes(p.en))favPhrases.push(p.en);});
+  localStorage.setItem('fp',JSON.stringify(favPhrases));
+  renderFavPhrases();updateStats();alert('✅ عبارات ذخیره شد!');
+}
+function speakAllPhrases(){
+  if(!loadedPhrases.length){alert('اول بارگذاری کن.');return;}
+  speak(loadedPhrases.map(p=>p.en).join('. '));
+}
+
+// ── SPEAKING ──
+let spkMode='bank';
+document.querySelectorAll('#spkModeCh .chip').forEach(c=>{
+  c.onclick=()=>{
+    document.querySelectorAll('#spkModeCh .chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');spkMode=c.dataset.m;
+    $('spkBank').style.display=spkMode==='bank'?'block':'none';
+    $('spkFree').style.display=spkMode==='free'?'block':'none';
+  };
+});
+const SQS={
+  1:[{en:"Do you work or are you a student?",fa:"کار می‌کنی یا دانشجو هستی؟"},
+     {en:"What do you usually do in your free time?",fa:"اوقات فراغتت را چطور می‌گذرانی؟"},
+     {en:"Do you prefer reading books or watching movies? Why?",fa:"کتاب یا فیلم؟ چرا؟"},
+     {en:"Tell me about your hometown.",fa:"درباره شهرت بگو."},
+     {en:"How do you usually commute to work?",fa:"چطور به محل کار می‌روی؟"}],
+  2:[{en:"Describe a person who has influenced you significantly.\n• Who they are\n• How you know them\n• Their qualities\n• Why they influenced you",fa:"یک شخص تأثیرگذار را توصیف کن."},
+     {en:"Describe a memorable trip you have taken.\n• Where you went\n• Who you went with\n• What you did\n• Why it was memorable",fa:"یک سفر به‌یادماندنی را توصیف کن."},
+     {en:"Describe a technology you use regularly.\n• What it is\n• How often you use it\n• What you use it for\n• Why it matters",fa:"یک فناوری که مرتباً استفاده می‌کنی را توصیف کن."}],
+  3:[{en:"Why do some people prefer to travel alone?",fa:"چرا برخی سفر انفرادی ترجیح می‌دهند؟"},
+     {en:"How has technology changed communication?",fa:"فناوری ارتباطات را چطور تغییر داده؟"},
+     {en:"What are the main causes of environmental problems?",fa:"علل اصلی مشکلات زیست‌محیطی چیست؟"},
+     {en:"How can education better prepare students for work?",fa:"آموزش چطور می‌تواند دانش‌آموزان را بهتر آماده کند؟"}]
+};
+let curPart='1',curQ=SQS[1][0].en;
+function renderSQs(){
+  const qs=SQS[curPart]||SQS[1];
+  $('spkQs').innerHTML=qs.map((q,i)=>`
+    <div class="qbox" id="sq${i}">
+      <div style="flex:1;"><div class="qen">${q.en.replace(/\n/g,'<br>')}</div><div class="qfa">${q.fa}</div></div>
+      <button class="spkbtn" onclick="event.stopPropagation();speak('${q.en.replace(/'/g,"\\'")}')">🔊</button>
+    </div>`).join('');
+  curQ=qs[0].en;
+  qs.forEach((_,i)=>{$(`sq${i}`).onclick=()=>{
+    $('spkQs').querySelectorAll('.qbox').forEach(x=>x.style.outline='none');
+    $(`sq${i}`).style.outline='2px solid var(--gold)';curQ=qs[i].en;
+  };});
+  $('sq0').style.outline='2px solid var(--gold)';
+}
+document.querySelectorAll('#partCh .chip').forEach(c=>{
+  c.onclick=()=>{document.querySelectorAll('#partCh .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');curPart=c.dataset.p;renderSQs();};
+});
+renderSQs();
+
+async function transFreeTopic(){
+  const t=$('freeTopic').value.trim();if(!t)return;
+  $('freeTopicOut').innerHTML=`<div class="loading"><div class="spin"></div></div>`;
+  try{const r=await ai('Translate to English. Return JSON:{"en":"...","tip":"one IELTS tip in Persian"}',t,300);
+  $('freeTopicOut').innerHTML=`<div class="trans-box"><div class="tl">🌐 English</div>${r.en||t}<br><span class="sm">💡 ${r.tip||''}</span></div>`;}
+  catch(e){$('freeTopicOut').innerHTML=`<div class="errbox">⚠️ ${e.message}</div>`;}
+}
+
+async function evalSpeak(){
+  const txt=$('spkIn').value.trim();if(txt.length<5){alert('پاسخ بنویس.');return;}
+  const btn=$('spkBtn');btn.disabled=true;
+  $('spkOut').innerHTML=`<div class="result-area"><div class="loading"><div class="spin"></div> در حال ارزیابی...</div></div>`;
+  const q=spkMode==='free'?($('freeTopic').value||'Free topic'):curQ;
+  try{
+    const sys=`You are a certified IELTS Speaking examiner. Return ONLY raw JSON (no markdown):
+{"band":7.0,"errors":[{"o":"original","f":"fixed","why":"Persian explanation"}],"vocab":[{"s":"simple","a":"advanced","ipa":"IPA","fa":"فارسی","ex":"example"}],"better":[{"o":"original","i":"improved"}],"sample":"band7 spoken-style answer 5-8 sentences","fb":"2-sentence Persian feedback"}
+Give 3-5 errors and 4-6 vocab with accurate IPA.`;
+    const r=await ai(sys,`Q: ${q}\nA: ${txt}`,1100);
+    let h=`<div class="result-area"><div class="band-big">🎯 Band ${r.band||'N/A'}</div>
+    <p class="sm" style="margin-top:4px;">${r.fb||''}</p>
+    <h4 style="font-size:12px;margin-top:10px;">اصلاحات</h4>`;
+    (r.errors||[]).forEach(e=>{h+=`<div class="eitem"><span class="o">${e.o}</span> ← <span class="f">${e.f}</span><div class="why">${e.why}</div></div>`;});
+    h+=`<h4 style="font-size:12px;margin-top:10px;">واژگان Band 7+</h4>`;
+    (r.vocab||[]).forEach(v=>{
+      const sa=(v.a||'').replace(/'/g,"\\'");
+      h+=`<div class="wcard" style="padding:7px 9px;"><div class="vpair"><span class="s">${v.s}</span>→<span class="a" onclick="speak('${sa}')">${v.a} 🔊</span></div><div class="sm">/${v.ipa}/ 🇮🇷 ${v.fa}</div><div class="eg">${v.ex}</div></div>`;
+    });
+    h+=`<h4 style="font-size:12px;margin-top:10px;">جمله‌های بهتر</h4>`;
+    (r.better||[]).forEach(b=>{h+=`<div class="eitem"><span class="o">${b.o}</span><br>← <span class="f">${b.i}</span></div>`;});
+    const ss=(r.sample||'').replace(/'/g,"\\'");
+    h+=`<h4 style="font-size:12px;margin-top:10px;">نمونه پاسخ Band 7</h4>
+    <div class="mans">${r.sample||''}</div>
+    <button class="btn sec" style="margin-top:6px;font-size:11px;" onclick="speak('${ss}')">🔊 پخش نمونه</button></div>`;
+    $('spkOut').innerHTML=h;updateStats();
+  }catch(e){$('spkOut').innerHTML=`<div class="result-area"><div class="errbox">⚠️ ${e.message}</div></div>`;}
+  btn.disabled=false;
+}
+
+// ── WRITING ──
+const WTS={
+  task1:[
+    {en:"The bar chart below shows energy consumption in four countries between 2000 and 2020. Summarise the main features and make comparisons.",fa:"نمودار میله‌ای مصرف انرژی ۴ کشور — ۲۰۰۰ تا ۲۰۲۰"},
+    {en:"The line graph shows urban and rural population growth in three regions from 1950 to 2020.",fa:"نمودار خطی رشد جمعیت شهری و روستایی"},
+    {en:"The table gives information about household expenditure in three countries. Summarise the main features.",fa:"جدول هزینه‌های خانوار در سه کشور"},
+    {en:"The diagram shows the process of paper recycling. Summarise the information.",fa:"دیاگرام فرآیند بازیافت کاغذ"}
+  ],
+  task2:[
+    {en:"Some people believe technology has made family communication easier, while others argue it creates distance. Discuss both views and give your opinion.",fa:"فناوری ارتباطات خانوادگی را بهتر یا بدتر کرده؟"},
+    {en:"Some people believe university education should be funded entirely by the government. Others argue students should pay tuition fees. Discuss both views and give your opinion.",fa:"آموزش دانشگاهی: دولتی یا با شهریه؟"},
+    {en:"Working from home has become increasingly common. What are the advantages and disadvantages?",fa:"کار از خانه: مزایا و معایب"},
+    {en:"To what extent does imprisonment deter people from committing crimes? Are there more effective alternatives?",fa:"آیا زندان بازدارنده است؟ جایگزین‌های بهتر؟"},
+    {en:"Globalisation has spread English as a global language. Do the benefits outweigh the disadvantages?",fa:"گسترش انگلیسی: مزایا بیشتر است یا معایب؟"}
+  ]
+};
+let curTask='task1', isCustom=false;
+function renderWTopics(){
+  const wrap=$('writTopics');
+  wrap.innerHTML=WTS[curTask].map((t,i)=>`<div class="chip ${i===0?'on':''}" onclick="selWTopic(${i})">${t.en.substring(0,30)}…</div>`).join('');
+  selWTopic(0);
+}
+function selWTopic(i){
+  $('writTopics').querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+  $('writTopics').querySelectorAll('.chip')[i]?.classList.add('on');
+  const tp=WTS[curTask][i];
+  if(tp){
+    $('selTopicBox').style.display='block';
+    $('selTopicBox').innerHTML=`<div class="qbox" style="flex-direction:column;gap:5px;">
+      <div class="qen">${tp.en}</div><div class="qfa">${tp.fa}</div>
+      <button class="btn sec" style="align-self:flex-start;font-size:10px;padding:4px 9px;" onclick="speak('${tp.en.replace(/'/g,"\\'")}')">🔊 پخش</button>
+    </div>`;
+  }
+}
+document.querySelectorAll('#taskCh .chip').forEach(c=>{
+  c.onclick=()=>{
+    document.querySelectorAll('#taskCh .chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    isCustom=c.dataset.t==='custom';
+    curTask=isCustom?'task1':c.dataset.t;
+    $('writTopicsWrap').style.display=isCustom?'none':'block';
+    $('customBox').style.display=isCustom?'block':'none';
+    $('selTopicBox').style.display=isCustom?'none':'block';
+    if(!isCustom)renderWTopics();
+  };
+});
+renderWTopics();
+function getActiveTopic(){
+  if(isCustom)return{en:$('customEn').value||'Custom topic',fa:$('customFa').value||'موضوع دلخواه'};
+  const i=[...$('writTopics').querySelectorAll('.chip')].findIndex(c=>c.classList.contains('on'));
+  return WTS[curTask][Math.max(0,i)];
+}
+
+async function evalWrit(){
+  const txt=$('writIn').value.trim();if(txt.length<20){alert('متن خیلی کوتاه است.');return;}
+  const tp=getActiveTopic();const btn=$('writBtn');btn.disabled=true;
+  $('writOut').innerHTML=`<div class="result-area"><div class="loading"><div class="spin"></div> ارزیابی...</div></div>`;
+  try{
+    const sys=`You are a certified IELTS examiner evaluating Academic Writing ${curTask==='task1'?'Task 1':'Task 2'}. Return ONLY raw JSON (no markdown):
+{"band":7.0,"cr":{"ta":7,"cc":7,"lr":7,"gr":7},"cf":{"ta":"Persian","cc":"Persian","lr":"Persian","gr":"Persian"},"errs":[{"o":"...","f":"...","why":"Persian"}],"vocab":[{"s":"...","a":"...","ipa":"IPA","fa":"فارسی","ex":"..."}],"better":[{"o":"...","i":"..."}],"b7":"band7 full response 200+ words","b8":"band8 full response 220+ words"}
+Give 4-7 errs and 5-7 vocab with IPA. cf in Persian 1-2 sentences each.`;
+    const r=await ai(sys,`Topic: ${tp.en}\nResponse:\n"""${txt}"""`,1200);
+    const c=r.cr||{},cf=r.cf||{};
+    let h=`<div class="result-area"><div class="band-big">🎯 Band ${r.band||'N/A'}</div>
+    <div class="criteria">
+      <div class="cr-item"><div class="s">${c.ta}</div>Task Achievement</div>
+      <div class="cr-item"><div class="s">${c.cc}</div>Coherence</div>
+      <div class="cr-item"><div class="s">${c.lr}</div>Lexical</div>
+      <div class="cr-item"><div class="s">${c.gr}</div>Grammar</div>
+    </div>
+    <p class="sm"><b>TA:</b> ${cf.ta}</p><p class="sm"><b>CC:</b> ${cf.cc}</p>
+    <p class="sm"><b>LR:</b> ${cf.lr}</p><p class="sm"><b>GR:</b> ${cf.gr}</p>
+    <h4 style="font-size:12px;margin-top:10px;">اصلاحات گرامری</h4>`;
+    (r.errs||[]).forEach(e=>{h+=`<div class="eitem"><span class="o">${e.o}</span> ← <span class="f">${e.f}</span><div class="why">${e.why}</div></div>`;});
+    h+=`<h4 style="font-size:12px;margin-top:10px;">واژگان Band 7+</h4>`;
+    (r.vocab||[]).forEach(v=>{
+      const sa=(v.a||'').replace(/'/g,"\\'");
+      h+=`<div class="wcard" style="padding:7px 9px;"><div class="vpair"><span class="s">${v.s}</span>→<span class="a" onclick="speak('${sa}')">${v.a} 🔊</span></div><div class="sm">/${v.ipa}/ 🇮🇷 ${v.fa}</div><div class="eg">${v.ex}</div></div>`;
+    });
+    h+=`<h4 style="font-size:12px;margin-top:10px;">جمله‌های بهتر</h4>`;
+    (r.better||[]).forEach(b=>{h+=`<div class="eitem"><span class="o">${b.o}</span><br>← <span class="f">${b.i}</span></div>`;});
+    h+=`<h4 style="font-size:12px;margin-top:10px;">نمونه Band 7</h4><div class="mans">${r.b7||''}</div>
+    <h4 style="font-size:12px;margin-top:10px;">نمونه Band 8</h4><div class="mans">${r.b8||''}</div></div>`;
+    $('writOut').innerHTML=h;updateStats();
+  }catch(e){$('writOut').innerHTML=`<div class="result-area"><div class="errbox">⚠️ ${e.message}</div></div>`;}
+  btn.disabled=false;
+}
+
+// ── GRAMMAR ──
+const GD={
+  present:{t:'حال ساده',str:'Subject + Verb(s/es)',tip:'کارهای روزمره · حقایق علمی',
+    pos:['I study every morning.','She works at a hospital.'],
+    neg:["I don't study every morning.","She doesn't work there."],
+    q:['Do you study every morning?','Does she work there?'],fa:['هر روز صبح درس می‌خوانم.','او در بیمارستان کار می‌کند.']},
+  past:{t:'گذشته ساده',str:'Subject + V2',tip:'کارهای تمام‌شده در گذشته',
+    pos:['I visited Paris last year.','She went to the meeting.'],
+    neg:["I didn't visit Paris.","She didn't go."],
+    q:['Did you visit Paris?','Did she go?'],fa:['سال گذشته از پاریس دیدن کردم.','او به جلسه رفت.']},
+  future:{t:'آینده ساده',str:'Subject + will + V',tip:'پیش‌بینی · تصمیم لحظه‌ای',
+    pos:['I will call you tomorrow.','She will arrive soon.'],
+    neg:["I won't call you.","She won't arrive."],
+    q:['Will you call me?','Will she arrive?'],fa:['فردا زنگ می‌زنم.','او به زودی می‌رسد.']},
+  cont:{t:'حال استمراری',str:'Subject + am/is/are + V-ing',tip:'کار در حال انجام',
+    pos:['I am studying now.','She is reading a book.'],
+    neg:["I'm not studying.","She isn't reading."],
+    q:['Are you studying?','Is she reading?'],fa:['الان دارم درس می‌خوانم.','او دارد کتاب می‌خواند.']},
+  perfect:{t:'حال کامل',str:'Subject + have/has + V3',tip:'تجربیات · اثر در حال',
+    pos:['I have lived here for 5 years.','She has visited Paris.'],
+    neg:["I haven't lived here.","She hasn't visited."],
+    q:['Have you lived here?','Has she visited?'],fa:['۵ سال است اینجا زندگی می‌کنم.','او پاریس رفته است.']},
+  cond:{t:'جملات شرطی',str:'If + condition, + result',tip:'نوع ۱: ممکن · نوع ۲: غیرواقعی',
+    pos:['If it rains, I will stay home.','If I were rich, I would travel.'],
+    neg:["If it doesn't rain, I'll go out.","If I weren't busy, I'd help."],
+    q:['What will you do if it rains?','What would you do if you were rich?'],
+    fa:['اگر باران ببارد خانه می‌مانم.','اگر پولدار بودم سفر می‌کردم.']},
+  passive:{t:'مجهول',str:'Subject + be + V3 (+ by agent)',tip:'فاعل ناشناخته · نوشتار آکادمیک',
+    pos:['The book was written by him.','English is spoken worldwide.'],
+    neg:["The book wasn't written by him.","English isn't spoken there."],
+    q:['Was the book written by him?','Is English spoken worldwide?'],
+    fa:['کتاب توسط او نوشته شد.','انگلیسی در سراسر جهان صحبت می‌شود.']}
+};
+document.querySelectorAll('#gramCh .chip').forEach(c=>{
+  c.onclick=()=>{document.querySelectorAll('#gramCh .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');renderGram(c.dataset.g);};
+});
+function renderGram(k){
+  const d=GD[k];if(!d)return;
+  const mkRows=arr=>arr.map(s=>`<div style="display:flex;align-items:center;gap:5px;margin:2px 0;">
+    <span style="font-size:11.5px;">${s}</span>
+    <button class="spkbtn" style="width:22px;height:22px;font-size:9px;" onclick="speak('${s.replace(/'/g,"\\'")}')">🔊</button>
+  </div>`).join('');
+  $('gramOut').innerHTML=`<div class="wcard" style="margin-top:8px;">
+    <div style="font-size:14px;font-weight:800;color:var(--stamp);">${d.t}</div>
+    <div style="font-family:monospace;background:var(--parch);padding:3px 7px;border-radius:4px;font-size:11px;margin:4px 0;direction:ltr;text-align:left;">${d.str}</div>
+    <div style="background:rgba(201,161,74,.15);padding:4px 7px;border-radius:4px;font-size:10.5px;margin-bottom:6px;">💡 ${d.tip}</div>
+    <div><b style="font-size:11px;">✅ مثبت:</b>${mkRows(d.pos)}</div>
+    <div style="margin-top:5px;"><b style="font-size:11px;">❌ منفی:</b>${mkRows(d.neg)}</div>
+    <div style="margin-top:5px;"><b style="font-size:11px;">❓ پرسشی:</b>${mkRows(d.q)}</div>
+    <div style="margin-top:5px;font-size:10.5px;color:var(--muted);">🇮🇷 ${d.fa.map(f=>`<div>${f}</div>`).join('')}</div>
+  </div>`;
+}
+renderGram('present');
+
+// ── PLAN ──
+function buildPlan(){
+  const dv=$('examDate').value;if(!dv){alert('تاریخ آزمون را وارد کن.');return;}
+  const days=Math.max(1,Math.round((new Date(dv)-new Date())/86400000));
+  const weeks=Math.max(1,Math.ceil(days/7));
+  const gap=(parseFloat($('tgtBand').value)-parseFloat($('curBand').value)).toFixed(1);
+  $('planSum').textContent=`${days} روز (${weeks} هفته) — فاصله: ${gap} باند`;
+  const phases=weeks<=2?['تثبیت سریع']:weeks<=6?['پایه‌سازی','تمرین متمرکز','شبیه‌سازی']:['پایه‌سازی','مهارت‌ها','تمرین تستی','شبیه‌سازی نهایی'];
+  const wpp=Math.ceil(weeks/phases.length);let h='',w=1;
+  phases.forEach(ph=>{
+    const ew=Math.min(weeks,w+wpp-1);
+    h+=`<div class="pw"><b>هفته ${w}–${ew} — ${ph}</b><ul>`;
+    if(ph.includes('پایه'))h+=`<li>روزی ۳۰ لغت + ۳۰ عبارت</li><li>۲ Task 2 + ۱ Task 1 هفتگی</li><li>Speaking Part 1 روزانه</li><li>مرور گرامر پایه</li>`;
+    else if(ph.includes('مهارت')||ph.includes('متمرکز'))h+=`<li>مرور لغات و بازنویسی اصلاح‌شده</li><li>۳ Task 2 + ۲ Task 1 هفتگی</li><li>Speaking Part 2 با تایمر</li><li>Listening + Reading: روزانه</li>`;
+    else h+=`<li>یک ست کامل Speaking (P1+P2+P3) روزانه</li><li>شبیه‌سازی کامل آزمون هفتگی</li><li>مرور نهایی واژگان</li>`;
+    h+=`</ul></div>`;w=ew+1;
+  });
+  $('planWks').innerHTML=h;$('planOut').style.display='block';updateStats();
+}
+
+// ── TRANSLATE ──
+let trDir='auto';
+document.querySelectorAll('#trDirCh .chip').forEach(c=>{
+  c.onclick=()=>{document.querySelectorAll('#trDirCh .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');trDir=c.dataset.d;};
+});
+async function doTrans(){
+  const txt=$('trIn').value.trim();if(!txt)return;
+  const btn=$('trBtn');btn.disabled=true;
+  $('trOut').innerHTML=`<div class="loading"><div class="spin"></div> ترجمه...</div>`;
+  try{
+    const dir=trDir==='auto'?'Detect and translate to the other (Persian↔English)':
+              trDir==='en-fa'?'Translate English to Persian':'Translate Persian to English';
+    const sys=`${dir}. Return ONLY raw JSON: {"trans":"translation","academic":"if fa→en, more academic IELTS version; else empty","ipa":[{"w":"word","ipa":"IPA","fa":"فارسی"}]}
+For ipa, pick up to 5 important English words with accurate IPA. If none, leave array empty.`;
+    const r=await ai(sys,txt,500);
+    let h=`<div class="trans-box"><div class="tl">🌐 ترجمه</div>${r.trans||txt}</div>`;
+    if(r.academic)h+=`<div class="trans-box" style="margin-top:6px;"><div class="tl">🎓 نسخه آکادمیک (آیلتس)</div>${r.academic}</div>`;
+    if((r.ipa||[]).length){
+      h+=`<div class="trans-box" style="margin-top:6px;"><div class="tl">🔤 تلفظ</div>`;
+      r.ipa.forEach(w=>{const sw=(w.w||'').replace(/'/g,"\\'");
+        h+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;"><b>${w.w}</b><span style="font-family:monospace;color:var(--stampdark);font-size:11px;">/${w.ipa}/</span><button class="spkbtn" style="width:24px;height:24px;font-size:9px;" onclick="speak('${sw}')">🔊</button><span class="sm">🇮🇷 ${w.fa}</span></div>`;
+      });h+=`</div>`;
+    }
+    $('trOut').innerHTML=h;
+  }catch(e){$('trOut').innerHTML=`<div class="errbox">⚠️ ${e.message}</div>`;}
+  btn.disabled=false;
+}
+async function quickTrans(inputId,outputId){
+  const txt=$(inputId).value.trim();if(!txt)return;
+  $(outputId).innerHTML=`<div class="loading"><div class="spin"></div></div>`;
+  try{const r=await ai('Detect language and translate to the other (Persian↔English). Return JSON:{"trans":"..."}',txt,300);
+  $(outputId).innerHTML=`<div class="trans-box"><div class="tl">🌐 ترجمه</div>${r.trans||txt}</div>`;}
+  catch(e){$(outputId).innerHTML=`<div class="errbox">⚠️ ${e.message}</div>`;}
+}
+
+// ── STATS ──
+function updateStats(){
+  const today=new Date().toDateString();
+  let streak=parseInt(localStorage.getItem('streak')||'0');
+  let score=parseInt(localStorage.getItem('score')||'0');
+  const last=localStorage.getItem('lastDay');
+  if(last!==today){
+    const yest=new Date();yest.setDate(yest.getDate()-1);
+    streak=last===yest.toDateString()?streak+1:1;
+    score+=10;
+    localStorage.setItem('streak',streak);localStorage.setItem('score',score);localStorage.setItem('lastDay',today);
+  }
+  $('stStreak').textContent=streak;
+  $('stVocab').textContent=favVocab.length;
+  $('stPhrases').textContent=favPhrases.length;
+  $('stScore').textContent=score;
+  const pct=Math.min(100,Math.round((streak/30)*100));
+  $('prog').style.width=pct+'%';$('progTxt').textContent=`${pct}٪ تکمیل`;
+}
+
+// ── INIT ──
+updateStats();renderFavVocab();renderFavPhrases();
+setTimeout(()=>{if(!loadedPhrases.length)loadPhrases();},300);
+</script>
+</body>
+</html>
